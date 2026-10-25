@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Надя - мой цветочек любви 🌸</title>
+<style>
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #ffe6f0 0%, #ffd1e3 50%, #ffc0d9 100%);
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    overflow: hidden;
+    padding: 20px;
+    user-select: none;
+  }
+  h1 {
+    color: #d6336c;
+    font-size: clamp(20px, 5vw, 32px);
+    margin: 0 0 8px;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(255,255,255,0.8);
+  }
+  .hint {
+    color: #b34d75;
+    font-size: clamp(13px, 3.5vw, 17px);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+ 
+  #flower-wrap {
+    position: relative;
+    width: min(80vw, 340px);
+    /* высота = квадрат цветка + запас под стебель */
+    height: calc(min(80vw, 340px) + 180px);
+    flex: none;
+  }
+
+ 
+  #flower {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: min(80vw, 340px);
+  }
+
+  .petal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 26%;
+    height: 40%;
+    margin-left: -13%;
+    margin-top: -20%;
+    transform-origin: 50% 50%;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: radial-gradient(circle at 50% 80%, #ff9ec4, #ff5c9d);
+    box-shadow: inset 0 -6px 12px rgba(180,0,70,0.25), 0 4px 10px rgba(200,50,110,0.25);
+    cursor: pointer;
+    will-change: transform;
+    animation: sway 3s ease-in-out infinite;
+  }
+  .petal:nth-child(even) {
+    background: radial-gradient(circle at 50% 80%, #ffb3d1, #ff4d8d);
+  }
+  .petal:active { filter: brightness(1.1); }
+
+  @keyframes sway {
+    0%, 100% { transform: var(--base) rotate(0deg); }
+    50%      { transform: var(--base) rotate(2.5deg); }
+  }
+
+  .petal.plucked {
+    animation: fly 0.7s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes fly {
+    0%   { transform: var(--base) rotate(0deg) translate(0, 0); opacity: 1; }
+    100% { transform: var(--base) rotate(100deg) translate(40px, 240px); opacity: 0; }
+  }
+
+  .center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 26%;
+    height: 26%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff4b0, #ffd54a 60%, #f5a623);
+    box-shadow: 0 0 18px rgba(255,200,0,0.7), inset 0 -4px 8px rgba(180,120,0,0.3);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(18px, 6vw, 30px);
+  }
+
+  
+  .stem {
+    position: absolute;
+    left: 50%;
+    top: 50%;                        
+    width: 10px;
+    margin-left: -5px;
+    height: calc(50% + 180px);      
+    background: linear-gradient(#5cb85c, #3d8b3d);
+    border-radius: 6px;
+    z-index: 1;
+  }
+  .stem::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 70px;
+    width: 42px;
+    height: 24px;
+    background: radial-gradient(circle at 30% 30%, #7ed957, #3d8b3d);
+    border-radius: 0 100% 0 100%;
+    transform: rotate(-20deg);
+    box-shadow: 0 2px 6px rgba(0,80,0,0.2);
+  }
+
+  #message {
+    margin-top: 18px;
+    min-height: 90px;
+    width: min(90vw, 420px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(214,51,108,0.18);
+    color: #a61e4d;
+    font-size: clamp(15px, 4vw, 20px);
+    font-weight: 600;
+    line-height: 1.4;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(4px);
+  }
+  #message.show { animation: pop 0.45s ease; }
+  @keyframes pop {
+    0%   { transform: scale(0.7); opacity: 0; }
+    60%  { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  #restart {
+    margin-top: 12px;
+    padding: 10px 26px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ff6fa5, #d6336c);
+    color: #fff;
+    font-size: clamp(14px, 3.8vw, 17px);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(214,51,108,0.4);
+    transition: transform 0.15s ease;
+    display: none;
+  }
+  #restart:active { transform: scale(0.95); }
+</style>
+</head>
+<body>
+
+<h1>Цветочек любви к Наде 🌸</h1>
+<div class="hint">Отрывай лепесточки — каждый скажет тебе кое-что приятное 💕</div>
+
+<div id="flower-wrap">
+  <div id="flower">
+    <div class="center">💗</div>
+  </div>
+</div>
+
+<div id="message">Нажми на лепесток</div>
+<button id="restart">Подарить новый цветок 🌷</button>
+
+<script>
+(function () {
+  const PETAL_COUNT = 8;
+  const LOVE_WISHES = [
+    "Пусть каждый твой день будет окутан улыбкой 💞",
+    "Моя любовь будет согревать тебя всегда ❤️",
+    "Пусть твое сердце знает, что я тебя люблю и очень сильно скучаю 🌷",
+    "Вся моя любовь будет только для тебя всю жизнь 🔥",
+    "Хочу тебя обжимать каждый день, минуту, секунду 🤗",
+    "Настанет время и мы будем встречать рассветы вместе 🌅",
+    "Ты — чудо. И я буду напоминать тебе про это каждый день ✨",
+    "Моя любовь к тебе не имеет границ 💖",
+    "Я тебя так сильно люблю, что не хватило бы миллиона таких цветочков, чтобы все передать 💌",
+    "Пусть в твоём сердце всегда цветёт весна 🌸",
+    "Я всегда буду рядом с тобой, чтобы не случилось💝",
+    "Моя любовь к тебе настолько теплая, что способна растопить все ледники мира 💫"
+  ];
+
+  const flower = document.getElementById('flower');
+  const messageEl = document.getElementById('message');
+  const restartBtn = document.getElementById('restart');
+
+  let remaining = 0;
+  let freeWishes = [];
+  let messageTimer = null;
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function showMessage(text) {
+    clearTimeout(messageTimer);
+    messageEl.classList.remove('show');
+    void messageEl.offsetWidth;
+    messageEl.textContent = text;
+    messageEl.classList.add('show');
+  }
+
+  function createFlower() {
+    flower.querySelectorAll('.petal, .stem').forEach(el => el.remove());
+    restartBtn.style.display = 'none';
+    remaining = PETAL_COUNT;
+    freeWishes = shuffle(LOVE_WISHES);
+    messageEl.textContent = 'Нажми на лепесток';
+    messageEl.classList.remove('show');
+
+    const stem = document.createElement('div');
+    stem.className = 'stem';
+    flower.appendChild(stem);
+
+    for (let i = 0; i < PETAL_COUNT; i++) {
+      const angle = (360 / PETAL_COUNT) * i;
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const base = `rotate(${angle}deg) translateY(-62%)`;
+      petal.style.setProperty('--base', base);
+      petal.style.transform = base;
+      petal.addEventListener('click', onPetalClick, { passive: true });
+      flower.appendChild(petal);
+    }
+  }
+
+  function onPetalClick(e) {
+    const petal = e.currentTarget;
+    if (petal.classList.contains('plucked')) return;
+
+    petal.classList.add('plucked');
+    remaining--;
+
+    let text;
+    if (freeWishes.length > 0) {
+      text = freeWishes.pop();
+    } else {
+      text = LOVE_WISHES[Math.floor(Math.random() * LOVE_WISHES.length)];
+    }
+    showMessage(text);
+
+    if (navigator.vibrate) navigator.vibrate(15);
+
+    if (remaining === 0) {
+      setTimeout(() => {
+        showMessage('Все лепестки облетели… но любовь к тебе останется навечно 💗');
+        restartBtn.style.display = 'inline-block';
+      }, 700);
+    }
+  }
+
+  restartBtn.addEventListener('click', createFlower);
+  createFlower();
+})();
+</script>
+</body>
+</html>
